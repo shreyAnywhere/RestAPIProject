@@ -17,6 +17,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+//	implementation 'com.google.cloud:spring-cloud-gcp-data-datastore:3.3.0'
+//	implementation 'com.google.cloud:spring-cloud-gcp-starter-data-datastore:3.3.0'
+//	implementation 'com.google.cloud:spring-cloud-gcp-starter'
+	implementation 'com.google.cloud:google-cloud-datastore:2.8.0'
 }
 
 tasks.named('test') {

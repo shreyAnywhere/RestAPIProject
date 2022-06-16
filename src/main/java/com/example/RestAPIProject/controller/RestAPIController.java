@@ -24,9 +24,13 @@ public class RestAPIController {
         return restAPIInterface.getShowDetails();
     }
 
-    @GetMapping("/login/{name}/{email}")
-    public String login(@PathVariable("name") String name, @PathVariable("email") String email){
-        return restAPIInterface.login(name, email);
+//    @GetMapping("/login/{name}/{email}")
+//    public String login(@PathVariable("name") String name, @PathVariable("email") String email){
+//        return restAPIInterface.login(name, email);
+//    }
+    @GetMapping("/login")
+    public String login(){
+        return "hello from login...";
     }
 
     @GetMapping("/register/{name}/{email}")

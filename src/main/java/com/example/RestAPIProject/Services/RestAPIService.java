@@ -42,6 +42,6 @@ public class RestAPIService implements RestAPIInterface {
 
     @Override
     public String login(String name, String email) {
-        return "You are logged in with name:" + name + " and email:" + email;
+        return ("You are logged in with name:" + name + " and email:" + email);
     }
 }

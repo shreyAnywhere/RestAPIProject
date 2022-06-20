@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class RestAPIService implements RestAPIInterface {
@@ -44,4 +45,25 @@ public class RestAPIService implements RestAPIInterface {
     public String login(String name, String email) {
         return ("You are logged in with name:" + name + " and email:" + email);
     }
+
+    @Override
+    public void delete(String name, String email) {
+        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("StudentDetails")
+                .build();
+        QueryResults<Entity> results = datastore.run(query);
+
+        while (results.hasNext()) {
+            Entity entity = results.next();
+            String nameDatastore = entity.getString("name");
+            String emailDatastore = entity.getString("email");
+            if (Objects.equals(name, nameDatastore) && Objects.equals(email, emailDatastore))
+            {
+                datastore.delete(entity.getKey());
+                break;
+            }
+        }
+    }
+
 }

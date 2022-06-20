@@ -28,7 +28,10 @@ public class RestAPIController {
     public String login(@PathVariable("name") String name, @PathVariable("email") String email){
         return restAPIInterface.login(name, email);
     }
-
+    @GetMapping("/login/{name}/{email}/delete")
+    public void delete(@PathVariable("name") String name, @PathVariable("email") String email){
+        restAPIInterface.delete(name, email);
+    }
     @GetMapping("/login")
     public String login(){
         return "hello from login...";

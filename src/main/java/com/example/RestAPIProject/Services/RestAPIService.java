@@ -67,9 +67,26 @@ public class RestAPIService implements RestAPIInterface {
     }
 
     @Override
-    public String update(String name, String email) {
+    public String update(String name, String email, String newName, String newEmail) {
 
-        return "Update method with " + name + " and " + email;
+        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("StudentDetails")
+                .build();
+        QueryResults<Entity> results = datastore.run(query);
+
+        while (results.hasNext()) {
+            Entity entity = results.next();
+            String nameDatastore = entity.getString("name");
+            String emailDatastore = entity.getString("email");
+            if (Objects.equals(name, nameDatastore) && Objects.equals(email, emailDatastore))
+            {
+                entity = Entity.newBuilder(entity).set("name", newName).set("email", newEmail).build();
+                datastore.update(entity);
+                break;
+            }
+        }
+        return "Update method with " + newName + " and " + newEmail;
     }
 
 }

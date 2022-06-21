@@ -66,4 +66,10 @@ public class RestAPIService implements RestAPIInterface {
         }
     }
 
+    @Override
+    public String update() {
+
+        return "Update method...";
+    }
+
 }

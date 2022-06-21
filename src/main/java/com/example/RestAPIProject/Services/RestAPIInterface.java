@@ -8,5 +8,5 @@ public interface RestAPIInterface {
     public void register(String name, String email);
     public String login(String name, String email);
     public void delete(String name, String email);
-    public String update();
+    public String update(String name, String email);
 }

@@ -31,8 +31,8 @@ public class RestAPIController {
         restAPIInterface.delete(name, email);
     }
     @RequestMapping(value = "/login/update", method = RequestMethod.POST)
-    public String update(){
-        return restAPIInterface.update();
+    public String update(@RequestHeader(value = "name") String name, @RequestHeader(value = "email") String email){
+        return restAPIInterface.update(name, email);
     }
     @GetMapping("/login")
     public String login(){

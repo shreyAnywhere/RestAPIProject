@@ -67,9 +67,9 @@ public class RestAPIService implements RestAPIInterface {
     }
 
     @Override
-    public String update() {
+    public String update(String name, String email) {
 
-        return "Update method...";
+        return "Update method with " + name + " and " + email;
     }
 
 }

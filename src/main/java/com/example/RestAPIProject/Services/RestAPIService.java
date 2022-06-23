@@ -43,7 +43,21 @@ public class RestAPIService implements RestAPIInterface {
 
     @Override
     public String login(String name, String email) {
-        return ("You are logged in with name:" + name + " and email:" + email);
+
+        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("StudentDetails")
+                .build();
+        QueryResults<Entity> results = datastore.run(query);
+
+        while (results.hasNext()) {
+            Entity entity = results.next();
+            String nameDatastore = entity.getString("name");
+            String emailDatastore = entity.getString("email");
+            if (Objects.equals(name, nameDatastore) && Objects.equals(email, emailDatastore))
+                return ("You are logged in with name:" + name + " and email:" + email);
+        }
+        return ("The name and email is not registered...");
     }
 
     @Override

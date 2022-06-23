@@ -6,13 +6,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class RestAPIController {
 
     @Autowired
     private RestAPIInterface restAPIInterface;
 
-    @GetMapping("/")
+    @GetMapping("/restapi")
     public String home(){
         return "This is the home page...";
     }

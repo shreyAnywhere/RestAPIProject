@@ -22,7 +22,7 @@ public class RestAPIService implements RestAPIInterface {
         builder.setKind("StudentDetails");
         //builder.setFilter(StructuredQuery.PropertyFilter.eq("email", "mno@gmail.com"));
         builder.setLimit(3);
-        builder.setOrderBy(StructuredQuery.OrderBy.asc("name"));
+        builder.setOrderBy(StructuredQuery.OrderBy.desc("name"));
 
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);

@@ -21,6 +21,7 @@ dependencies {
 //	implementation 'com.google.cloud:spring-cloud-gcp-data-datastore:3.3.0'
 //	implementation 'com.google.cloud:spring-cloud-gcp-starter-data-datastore:3.3.0'
 //	implementation 'com.google.cloud:spring-cloud-gcp-starter'
+	implementation 'com.google.appengine:appengine-api-1.0-sdk:2.0.5'
 	implementation 'com.google.cloud:google-cloud-datastore:2.8.0'
 }
 

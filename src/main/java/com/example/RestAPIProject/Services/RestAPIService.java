@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.cloud.datastore.StructuredQuery;
 
 @Service
 public class RestAPIService implements RestAPIInterface {
@@ -14,9 +17,12 @@ public class RestAPIService implements RestAPIInterface {
 
         List<String> stringList = new ArrayList<>();
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-        Query<Entity> query = Query.newEntityQueryBuilder()
-                .setKind("StudentDetails")
-                .build();
+
+        EntityQuery.Builder builder = Query.newEntityQueryBuilder();
+        builder.setKind("StudentDetails");
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", "mno@gmail.com"));
+
+        Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);
 
         while (results.hasNext()) {

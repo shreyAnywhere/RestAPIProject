@@ -21,6 +21,8 @@ public class RestAPIService implements RestAPIInterface {
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
         //builder.setFilter(StructuredQuery.PropertyFilter.eq("email", "mno@gmail.com"));
+        builder.setLimit(3);
+        builder.setOrderBy(StructuredQuery.OrderBy.asc("name"));
 
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);

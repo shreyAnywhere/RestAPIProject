@@ -10,6 +10,8 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.cloud.datastore.StructuredQuery;
 
+import static com.google.cloud.datastore.StructuredQuery.CompositeFilter.and;
+
 @Service
 public class RestAPIService implements RestAPIInterface {
     @Override
@@ -21,8 +23,10 @@ public class RestAPIService implements RestAPIInterface {
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
         //builder.setFilter(StructuredQuery.PropertyFilter.eq("email", "mno@gmail.com"));
-        builder.setLimit(3);
-        builder.setOrderBy(StructuredQuery.OrderBy.desc("name"));
+        //builder.setLimit(3);
+        //builder.setOrderBy(StructuredQuery.OrderBy.desc("name"));
+        //Cursor cursor = Cursor.fromUrlSafe(null);
+        //builder.setStartCursor(cursor);
 
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);
@@ -53,17 +57,20 @@ public class RestAPIService implements RestAPIInterface {
     public String login(String name, String email) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-        Query<Entity> query = Query.newEntityQueryBuilder()
-                .setKind("StudentDetails")
-                .build();
+
+        EntityQuery.Builder builder = Query.newEntityQueryBuilder();
+        builder.setKind("StudentDetails");
+        builder.setFilter(and(StructuredQuery.PropertyFilter.eq("email", email),StructuredQuery.PropertyFilter.eq("name", email)));
+        //builder.setLimit(3);
+        //builder.setOrderBy(StructuredQuery.OrderBy.desc("name"));
+        //Cursor cursor = Cursor.fromUrlSafe(null);
+        //builder.setStartCursor(cursor);
+
+        Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);
 
-        while (results.hasNext()) {
-            Entity entity = results.next();
-            String nameDatastore = entity.getString("name");
-            String emailDatastore = entity.getString("email");
-            if (Objects.equals(name, nameDatastore) && Objects.equals(email, emailDatastore))
-                return ("You are logged in with name:" + name + " and email:" + email);
+        if(results.hasNext()) {
+            return ("You are logged in with name:" + name + " and email:" + email);
         }
         return ("The name and email is not registered...");
     }

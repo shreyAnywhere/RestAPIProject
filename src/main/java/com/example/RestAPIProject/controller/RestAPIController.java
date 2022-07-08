@@ -28,8 +28,8 @@ public class RestAPIController {
         return restAPIInterface.login(name, email);
     }
     @GetMapping("/login/{name}/{email}/delete")
-    public void delete(@PathVariable("name") String name, @PathVariable("email") String email){
-        restAPIInterface.delete(name, email);
+    public String delete(@PathVariable("name") String name, @PathVariable("email") String email){
+       return restAPIInterface.delete(name, email);
     }
     @RequestMapping(value = "/login/update", method = RequestMethod.POST)
     public String update(@RequestHeader(value = "name") String name, @RequestHeader(value = "email") String email, @RequestHeader(value = "newName") String newName, @RequestHeader(value = "newEmail") String newEmail){
@@ -41,8 +41,8 @@ public class RestAPIController {
     }
 
     @GetMapping("/register/{name}/{email}")
-    public void register(@PathVariable("name") String name, @PathVariable("email") String email){
+    public String register(@PathVariable("name") String name, @PathVariable("email") String email){
 
-        restAPIInterface.register(name, email);
+        return restAPIInterface.register(name, email);
     }
 }

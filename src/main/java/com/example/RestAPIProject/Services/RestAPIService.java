@@ -47,7 +47,7 @@ public class RestAPIService implements RestAPIInterface {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         //QueryResults<Entity> results = getResults(email);
-        KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails").setProjectId("email");
+        KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails");
 
         FullEntity entity = Entity.newBuilder(keyFactory.newKey())
                 .set("name", name)

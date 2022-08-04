@@ -70,7 +70,7 @@ public class RestAPIService implements RestAPIInterface {
     }
 
     @Override
-    public Value<?> delete(String email) {
+    public boolean delete(String email) {
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         QueryResults<Entity> results = getResults(email);
         Entity entity = results.next();
@@ -78,7 +78,7 @@ public class RestAPIService implements RestAPIInterface {
         entity = Entity.newBuilder(entity).set("isDeleted", true).build();
         datastore.update(entity);
 
-        return entity.getValue("isDeleted");
+        return entity.getBoolean("isDeleted");
     }
 
     @Override

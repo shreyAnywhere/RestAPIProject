@@ -70,16 +70,15 @@ public class RestAPIService implements RestAPIInterface {
     }
 
     @Override
-    public String delete(String email) {
+    public Value<?> delete(String email) {
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         QueryResults<Entity> results = getResults(email);
         Entity entity = results.next();
-        //Map<String, Value<?>> map = entity.getProperties();
 
         entity = Entity.newBuilder(entity).set("isDeleted", true).build();
         datastore.update(entity);
 
-        return "The entry has been deleted...";
+        return entity.getValue("isDeleted");
     }
 
     @Override

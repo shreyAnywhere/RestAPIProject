@@ -3,6 +3,7 @@ package com.example.RestAPIProject.controller;
 import com.example.RestAPIProject.Services.RestAPIInterface;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.QueryResults;
+import com.google.cloud.datastore.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class RestAPIController {
     }
 
     @GetMapping("/login/{email}/delete")
-    public String delete(@PathVariable("email") String email){
+    public Value<?> delete(@PathVariable("email") String email){
        return restAPIInterface.delete(email);
     }
 

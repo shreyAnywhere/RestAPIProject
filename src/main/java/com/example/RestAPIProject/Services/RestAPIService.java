@@ -46,8 +46,8 @@ public class RestAPIService implements RestAPIInterface {
     public String register(String name, String email) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-//        QueryResults<Entity> results = getResults(email);
-        KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails");
+        //QueryResults<Entity> results = getResults(email);
+        KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails").setProjectId("email");
 
         FullEntity entity = Entity.newBuilder(keyFactory.newKey())
                 .set("name", name)
@@ -56,7 +56,7 @@ public class RestAPIService implements RestAPIInterface {
                 .build();
         datastore.put(entity);
 
-        return "The email you want to register is already registered...";
+        return "The email has been registered...";
     }
 
     @Override

@@ -20,6 +20,7 @@ public class RestAPIService implements RestAPIInterface {
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
         builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", false));
 
         Query<Entity> query = builder.build();
 
@@ -46,17 +47,21 @@ public class RestAPIService implements RestAPIInterface {
     public String register(String name, String email) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-        //QueryResults<Entity> results = getResults(email);
+        QueryResults<Entity> results = getResults(email);
         KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails");
 
-        FullEntity entity = Entity.newBuilder(keyFactory.newKey())
-                .set("name", name)
-                .set("email", email)
-                .set("isDeleted", false)
-                .build();
-        datastore.put(entity);
+        if(!results.hasNext()) {
+            FullEntity entity = Entity.newBuilder(keyFactory.newKey())
+                    .set("name", name)
+                    .set("email", email)
+                    .set("isDeleted", false)
+                    .build();
+            datastore.put(entity);
 
-        return "The email has been registered...";
+            return "The email has been registered...";
+        }
+
+        return "You cannot register email multiple times...";
     }
 
     @Override

@@ -33,7 +33,7 @@ public class RestAPIController {
     }
 
     @GetMapping("/login/{email}/delete")
-    public boolean delete(@PathVariable("email") String email){
+    public String delete(@PathVariable("email") String email){
        return restAPIInterface.delete(email);
     }
 

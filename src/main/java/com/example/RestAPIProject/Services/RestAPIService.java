@@ -70,15 +70,19 @@ public class RestAPIService implements RestAPIInterface {
     }
 
     @Override
-    public boolean delete(String email) {
+    public String delete(String email) {
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         QueryResults<Entity> results = getResults(email);
         Entity entity = results.next();
 
-        entity = Entity.newBuilder(entity).set("isDeleted", true).build();
-        datastore.update(entity);
+        if(!entity.getBoolean("isDeleted")) {
+            entity = Entity.newBuilder(entity).set("isDeleted", true).build();
+            datastore.update(entity);
 
-        return entity.getBoolean("isDeleted");
+            return "Your entry is deleted...";
+        }
+
+        return "Your selected entry has already been deleted...";
     }
 
     @Override

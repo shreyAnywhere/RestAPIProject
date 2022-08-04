@@ -3,9 +3,8 @@ package com.example.RestAPIProject.Services;
 import com.google.cloud.datastore.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.cloud.datastore.StructuredQuery;
@@ -15,21 +14,20 @@ import static com.google.cloud.datastore.StructuredQuery.CompositeFilter.and;
 @Service
 public class RestAPIService implements RestAPIInterface {
 
-    private static QueryResults<Entity> getResults(String name, String email){
+    private static QueryResults<Entity> getResults(String email){
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
-        builder.setFilter(and(StructuredQuery.PropertyFilter.eq("email", email),StructuredQuery.PropertyFilter.eq("name", name)));
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
 
         Query<Entity> query = builder.build();
 
         return datastore.run(query);
     }
     @Override
-    public List<String> getShowDetails() {
+    public QueryResults<Entity> getShowDetails() {
 
-        List<String> stringList = new ArrayList<>();
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
@@ -39,67 +37,58 @@ public class RestAPIService implements RestAPIInterface {
         //builder.setOrderBy(StructuredQuery.OrderBy.desc("name"));
         //Cursor cursor = Cursor.fromUrlSafe(null);
         //builder.setStartCursor(cursor);
-
         Query<Entity> query = builder.build();
-        QueryResults<Entity> results = datastore.run(query);
 
-        while (results.hasNext()) {
-            Entity entity = results.next();
-            String name = entity.getString("name");
-            String email = entity.getString("email");
-            stringList.add(name + " " + email);
-        }
-        return stringList;
+        return datastore.run(query);
     }
 
     @Override
     public String register(String name, String email) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-        QueryResults<Entity> results = getResults(name, email);
+//        QueryResults<Entity> results = getResults(email);
         KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails");
 
-        if (!results.hasNext())
-        {
-            FullEntity entity = Entity.newBuilder(keyFactory.newKey())
-                    .set("name", name)
-                    .set("email", email)
-                    .build();
-            datastore.put(entity);
-        }
+        FullEntity entity = Entity.newBuilder(keyFactory.newKey())
+                .set("name", name)
+                .set("email", email)
+                .set("isDeleted", false)
+                .build();
+        datastore.put(entity);
 
         return "The email you want to register is already registered...";
     }
 
     @Override
-    public String login(String name, String email) {
-        QueryResults<Entity> results = getResults(name, email);
+    public String login(String email) {
+        QueryResults<Entity> results = getResults(email);
 
         if(results.hasNext()) {
-            return ("You are logged in with name:" + name + " and email:" + email);
+            return ("You are logged in with email:" + email);
         }
         return ("The name and email is not registered...");
     }
 
     @Override
-    public String delete(String name, String email) {
+    public String delete(String email) {
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-        QueryResults<Entity> results = getResults(name, email);
+        QueryResults<Entity> results = getResults(email);
+        Entity entity = results.next();
+        //Map<String, Value<?>> map = entity.getProperties();
 
-        if(results.hasNext()) {
-            Entity entity = results.next();
-            datastore.delete(entity.getKey());
+        entity = Entity.newBuilder(entity).set("isDeleted", true).build();
+        datastore.update(entity);
 
-            return "The entry has been deleted...";
-        }
-        return "The entry you want to delete is not registered...";
+        return "The entry has been deleted...";
     }
 
     @Override
     public String update(String name, String email, String newName, String newEmail) {
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-        QueryResults<Entity> results = getResults(name, email);
+        QueryResults<Entity> results = getResults(name);
 
+        if(Objects.equals(name, newName) && Objects.equals(email, newEmail))
+            return "Your new name and new email are same as the old one...";
         if (results.hasNext()) {
             Entity entity = results.next();
             entity = Entity.newBuilder(entity).set("name", newName).set("email", newEmail).build();

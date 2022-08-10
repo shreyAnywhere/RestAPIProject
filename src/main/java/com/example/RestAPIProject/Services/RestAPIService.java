@@ -5,11 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.cloud.datastore.StructuredQuery;
-
-import static com.google.cloud.datastore.StructuredQuery.CompositeFilter.and;
 
 @Service
 public class RestAPIService implements RestAPIInterface {
@@ -20,10 +16,9 @@ public class RestAPIService implements RestAPIInterface {
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
         builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
-        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", false));
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("isDeleted", false));
 
         Query<Entity> query = builder.build();
-
         return datastore.run(query);
     }
     @Override
@@ -39,39 +34,51 @@ public class RestAPIService implements RestAPIInterface {
         //Cursor cursor = Cursor.fromUrlSafe(null);
         //builder.setStartCursor(cursor);
         Query<Entity> query = builder.build();
-
         return datastore.run(query);
     }
 
     @Override
-    public String register(String name, String email) {
+    public String register(String name, String email, String password) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         QueryResults<Entity> results = getResults(email);
         KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails");
 
         if(!results.hasNext()) {
-            FullEntity entity = Entity.newBuilder(keyFactory.newKey())
+            FullEntity<IncompleteKey> entity = Entity.newBuilder(keyFactory.newKey())
                     .set("name", name)
                     .set("email", email)
+                    .set("password", password)
                     .set("isDeleted", false)
                     .build();
             datastore.put(entity);
 
-            return "The email has been registered...";
+            return "The name with the given email has been registered...";
         }
 
-        return "You cannot register email multiple times...";
+        return "This email has been already registered...";
     }
 
     @Override
-    public String login(String email) {
-        QueryResults<Entity> results = getResults(email);
+    public String login(String email, String password) {
 
-        if(results.hasNext()) {
-            return ("You are logged in with email:" + email);
+        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+
+        EntityQuery.Builder builder = Query.newEntityQueryBuilder();
+        builder.setKind("StudentDetails");
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("password", password));
+
+        Query<Entity> query = builder.build();
+        QueryResults<Entity> results = datastore.run(query);
+
+        if(results.hasNext()){
+            Entity entity = results.next();
+
+            return entity.getValue("name") + "has logged in...";
         }
-        return ("The name and email is not registered...");
+
+        return "Entered email or password is incorrect...";
     }
 
     @Override

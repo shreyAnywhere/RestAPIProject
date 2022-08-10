@@ -21,15 +21,15 @@ public class RestAPIController {
         return restAPIInterface.getShowDetails();
     }
 
-    @GetMapping("/register/{email}/{name}")
-    public String register(@PathVariable("name") String name, @PathVariable("email") String email){
+    @GetMapping("/register/{name}/{email}/{password}")
+    public String register(@PathVariable("name") String name, @PathVariable("email") String email, @PathVariable("password") String password){
 
-        return restAPIInterface.register(name, email);
+        return restAPIInterface.register(name, email, password);
     }
 
-    @GetMapping("/login/{email}")
-    public String login(@PathVariable("email") String email){
-        return restAPIInterface.login(email);
+    @GetMapping("/login/{email}/{password}")
+    public String login(@PathVariable("email") String email, @PathVariable("password") String password){
+        return restAPIInterface.login(email, password);
     }
 
     @GetMapping("/login/{email}/delete")

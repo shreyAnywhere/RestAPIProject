@@ -41,10 +41,10 @@ public class RestAPIService implements RestAPIInterface {
     public String register(String name, String email, String password) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-        QueryResults<Entity> results = getResults(email);
+        //QueryResults<Entity> results = getResults(email);
         KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails");
 
-        if(!results.hasNext()) {
+        //if(!results.hasNext()) {
             FullEntity<IncompleteKey> entity = Entity.newBuilder(keyFactory.newKey())
                     .set("name", name)
                     .set("email", email)
@@ -54,9 +54,9 @@ public class RestAPIService implements RestAPIInterface {
             datastore.put(entity);
 
             return "The name with the given email has been registered...";
-        }
+        //}
 
-        return "This email has been already registered...";
+        //return "This email has been already registered...";
     }
 
     @Override

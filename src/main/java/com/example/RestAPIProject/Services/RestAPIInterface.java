@@ -12,5 +12,6 @@ public interface RestAPIInterface {
     public String register(String name, String email, String password);
     public String login(String email, String password);
     public String delete(String email, String password);
-    public String update(String name, String email, String newName, String newEmail);
+    public String updateName(String email, String password, String newname);
+    public String updatePassword(String email, String password, String newpassword);
 }

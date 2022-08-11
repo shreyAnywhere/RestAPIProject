@@ -3,8 +3,6 @@ package com.example.RestAPIProject.Services;
 import com.google.cloud.datastore.*;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-
 import com.google.cloud.datastore.StructuredQuery;
 
 @Service
@@ -97,18 +95,45 @@ public class RestAPIService implements RestAPIInterface {
     }
 
     @Override
-    public String update(String name, String email, String newName, String newEmail) {
-//        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-//        QueryResults<Entity> results = getResults(name);
-//
-//        if(Objects.equals(name, newName) && Objects.equals(email, newEmail))
-//            return "Your new name and new email are same as the old one...";
-//        if (results.hasNext()) {
-//            Entity entity = results.next();
-//            entity = Entity.newBuilder(entity).set("name", newName).set("email", newEmail).build();
-//            datastore.update(entity);
-//            return "Update method with " + newName + " and " + newEmail;
-//        }
+    public String updateName(String email, String password, String newname) {
+
+        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+        EntityQuery.Builder builder = Query.newEntityQueryBuilder();
+        builder.setKind("StudentDetails");
+        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("password", password)));
+
+        Query<Entity> query = builder.build();
+        QueryResults<Entity> results = datastore.run(query);
+
+        if(results.hasNext()){
+            Entity entity = results.next();
+            entity = Entity.newBuilder(entity).set("name", newname).build();
+            datastore.update(entity);
+
+            return "Name is updated...";
+        }
+
+        return "The entry you want to update is not registered...";
+    }
+
+    @Override
+    public String updatePassword(String email, String password, String newpassword) {
+
+        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+        EntityQuery.Builder builder = Query.newEntityQueryBuilder();
+        builder.setKind("StudentDetails");
+        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("password", password)));
+
+        Query<Entity> query = builder.build();
+        QueryResults<Entity> results = datastore.run(query);
+
+        if(results.hasNext()){
+            Entity entity = results.next();
+            entity = Entity.newBuilder(entity).set("password", newpassword).build();
+            datastore.update(entity);
+
+            return "Password is updated...";
+        }
 
         return "The entry you want to update is not registered...";
     }

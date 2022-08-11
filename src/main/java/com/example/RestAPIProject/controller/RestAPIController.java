@@ -37,8 +37,13 @@ public class RestAPIController {
        return restAPIInterface.delete(email, password);
     }
 
-    @RequestMapping(value = "/login/update", method = RequestMethod.POST)
-    public String update(@RequestHeader(value = "name") String name, @RequestHeader(value = "email") String email, @RequestHeader(value = "newName") String newName, @RequestHeader(value = "newEmail") String newEmail){
-        return restAPIInterface.update(name, email, newName, newEmail);
+    @RequestMapping(value = "/login/{email}/{password}/updatename/{newname}", method = RequestMethod.POST)
+    public String updateName(@PathVariable("email") String email, @PathVariable("password") String password, @PathVariable("newname") String newname){
+        return restAPIInterface.updateName(email, password, newname);
+    }
+
+    @RequestMapping(value = "/login/{email}/{password}/updatepassword/{newpassword}", method = RequestMethod.POST)
+    public String updatePassword(@PathVariable("email") String email, @PathVariable("password") String password, @PathVariable("newpassword") String newpassword){
+        return restAPIInterface.updateName(email, password, newpassword);
     }
 }

@@ -60,8 +60,7 @@ public class RestAPIService implements RestAPIInterface {
 
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
-        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
-        builder.setFilter(StructuredQuery.PropertyFilter.eq("password", password));
+        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("password", password)));
 
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);
@@ -81,8 +80,7 @@ public class RestAPIService implements RestAPIInterface {
 
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
-        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
-        builder.setFilter(StructuredQuery.PropertyFilter.eq("password", password));
+        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("password", password)));
 
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);

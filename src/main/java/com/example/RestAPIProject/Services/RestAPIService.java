@@ -73,7 +73,7 @@ public class RestAPIService implements RestAPIInterface {
         QueryResults<Entity> results = datastore.run(query);
         Entity entity = results.next();
 
-        if(!entity.getBoolean("isDeleted")){
+        if(entity != null && !entity.getBoolean("isDeleted")){
 
             return entity.getString("name") + " " + "has logged in...";
         }

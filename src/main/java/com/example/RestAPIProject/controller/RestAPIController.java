@@ -33,8 +33,8 @@ public class RestAPIController {
     }
 
     @GetMapping("/login/{email}/{password}/delete")
-    public String delete(@PathVariable("email") String email){
-       return restAPIInterface.delete(email);
+    public String delete(@PathVariable("email") String email, @PathVariable("password") String password){
+       return restAPIInterface.delete(email, password);
     }
 
     @RequestMapping(value = "/login/update", method = RequestMethod.POST)

@@ -76,16 +76,23 @@ public class RestAPIService implements RestAPIInterface {
         if(results.hasNext()){
             Entity entity = results.next();
 
-            return entity.getString("name") + "has logged in...";
+            return entity.getString("name") + " " + "has logged in...";
         }
 
-        return "Entered email or password is incorrect...";
+        return "Entered email or password is incorrect or the entry has not registered...";
     }
 
     @Override
-    public String delete(String email) {
+    public String delete(String email, String password) {
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-        QueryResults<Entity> results = getResults(email);
+
+        EntityQuery.Builder builder = Query.newEntityQueryBuilder();
+        builder.setKind("StudentDetails");
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("password", password));
+
+        Query<Entity> query = builder.build();
+        QueryResults<Entity> results = datastore.run(query);
         Entity entity = results.next();
 
         if(!entity.getBoolean("isDeleted")) {

@@ -32,7 +32,7 @@ public class RestAPIController {
         return restAPIInterface.login(email, password);
     }
 
-    @GetMapping("/login/{email}/delete")
+    @GetMapping("/login/{email}/{password}/delete")
     public String delete(@PathVariable("email") String email){
        return restAPIInterface.delete(email);
     }

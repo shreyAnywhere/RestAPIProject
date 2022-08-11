@@ -68,6 +68,7 @@ public class RestAPIService implements RestAPIInterface {
         builder.setKind("StudentDetails");
         builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
         builder.setFilter(StructuredQuery.PropertyFilter.eq("password", password));
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("isDeleted", false));
 
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);
@@ -75,7 +76,7 @@ public class RestAPIService implements RestAPIInterface {
         if(results.hasNext()){
             Entity entity = results.next();
 
-            return entity.getValue("name") + "has logged in...";
+            return entity.getString("name") + "has logged in...";
         }
 
         return "Entered email or password is incorrect...";

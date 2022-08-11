@@ -10,17 +10,6 @@ import com.google.cloud.datastore.StructuredQuery;
 @Service
 public class RestAPIService implements RestAPIInterface {
 
-    private static QueryResults<Entity> getResults(String email){
-        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-
-        EntityQuery.Builder builder = Query.newEntityQueryBuilder();
-        builder.setKind("StudentDetails");
-        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
-        builder.setFilter(StructuredQuery.PropertyFilter.eq("isDeleted", false));
-
-        Query<Entity> query = builder.build();
-        return datastore.run(query);
-    }
     @Override
     public QueryResults<Entity> getShowDetails() {
 
@@ -41,10 +30,17 @@ public class RestAPIService implements RestAPIInterface {
     public String register(String name, String email, String password) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-        QueryResults<Entity> results = getResults(email);
-        KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails");
+        EntityQuery.Builder builder = Query.newEntityQueryBuilder();
+        builder.setKind("StudentDetails");
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("password", password));
 
-        if(!results.hasNext()) {
+        KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails");
+        Query<Entity> query = builder.build();
+        QueryResults<Entity> results = datastore.run(query);
+        Entity currEntity = results.next();
+
+        if(!results.hasNext() || currEntity.getBoolean("isDeleted")) {
             FullEntity<IncompleteKey> entity = Entity.newBuilder(keyFactory.newKey())
                     .set("name", name)
                     .set("email", email)
@@ -106,17 +102,17 @@ public class RestAPIService implements RestAPIInterface {
 
     @Override
     public String update(String name, String email, String newName, String newEmail) {
-        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-        QueryResults<Entity> results = getResults(name);
-
-        if(Objects.equals(name, newName) && Objects.equals(email, newEmail))
-            return "Your new name and new email are same as the old one...";
-        if (results.hasNext()) {
-            Entity entity = results.next();
-            entity = Entity.newBuilder(entity).set("name", newName).set("email", newEmail).build();
-            datastore.update(entity);
-            return "Update method with " + newName + " and " + newEmail;
-        }
+//        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+//        QueryResults<Entity> results = getResults(name);
+//
+//        if(Objects.equals(name, newName) && Objects.equals(email, newEmail))
+//            return "Your new name and new email are same as the old one...";
+//        if (results.hasNext()) {
+//            Entity entity = results.next();
+//            entity = Entity.newBuilder(entity).set("name", newName).set("email", newEmail).build();
+//            datastore.update(entity);
+//            return "Update method with " + newName + " and " + newEmail;
+//        }
 
         return "The entry you want to update is not registered...";
     }

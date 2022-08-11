@@ -33,6 +33,7 @@ public class RestAPIService implements RestAPIInterface {
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
         builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("isDeleted", false));
 
         KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails");
         Query<Entity> query = builder.build();
@@ -47,22 +48,7 @@ public class RestAPIService implements RestAPIInterface {
                     .build();
             datastore.put(entity);
 
-            return "The name with the given email has been registered...";
-        }
-        else {
-            Entity currEntity = results.next();
-
-            if(currEntity.getBoolean("isDeleted")){
-                FullEntity<IncompleteKey> entity = Entity.newBuilder(keyFactory.newKey())
-                        .set("name", name)
-                        .set("email", email)
-                        .set("password", password)
-                        .set("isDeleted", false)
-                        .build();
-                datastore.put(entity);
-
-                return "The name with the given email has been registered...";
-            }
+            return "Your email is registered...";
         }
 
         return "This email has been already registered...";

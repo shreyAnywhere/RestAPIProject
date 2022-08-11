@@ -32,8 +32,7 @@ public class RestAPIService implements RestAPIInterface {
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
-        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
-        builder.setFilter(StructuredQuery.PropertyFilter.eq("isDeleted", false));
+        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("isDeleted", false)));
 
         KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails");
         Query<Entity> query = builder.build();

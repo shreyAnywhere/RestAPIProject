@@ -68,13 +68,12 @@ public class RestAPIService implements RestAPIInterface {
         builder.setKind("StudentDetails");
         builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
         builder.setFilter(StructuredQuery.PropertyFilter.eq("password", password));
-        builder.setFilter(StructuredQuery.PropertyFilter.eq("isDeleted", false));
 
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);
+        Entity entity = results.next();
 
-        if(results.hasNext()){
-            Entity entity = results.next();
+        if(results.hasNext() && !entity.getBoolean("isDeleted")){
 
             return entity.getString("name") + " " + "has logged in...";
         }

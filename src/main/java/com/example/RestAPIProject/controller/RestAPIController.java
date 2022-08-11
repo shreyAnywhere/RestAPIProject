@@ -44,6 +44,6 @@ public class RestAPIController {
 
     @RequestMapping(value = "/login/{email}/{password}/updatepassword/{newpassword}", method = RequestMethod.POST)
     public String updatePassword(@PathVariable("email") String email, @PathVariable("password") String password, @PathVariable("newpassword") String newpassword){
-        return restAPIInterface.updateName(email, password, newpassword);
+        return restAPIInterface.updatePassword(email, password, newpassword);
     }
 }

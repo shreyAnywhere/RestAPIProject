@@ -9,17 +9,17 @@ import com.google.cloud.datastore.StructuredQuery;
 public class RestAPIService implements RestAPIInterface {
 
     @Override
-    public QueryResults<Entity> getShowDetails() {
+    public QueryResults<Entity> getShowDetails(String email) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
-        //builder.setFilter(StructuredQuery.PropertyFilter.eq("email", "mno@gmail.com"));
-        //builder.setLimit(3);
-        //builder.setOrderBy(StructuredQuery.OrderBy.desc("name"));
-        //Cursor cursor = Cursor.fromUrlSafe(null);
-        //builder.setStartCursor(cursor);
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
+//        builder.setLimit(3);
+//        builder.setOrderBy(StructuredQuery.OrderBy.desc("name"));
+//        Cursor cursor = Cursor.fromUrlSafe(null);
+//        builder.setStartCursor(cursor);
         Query<Entity> query = builder.build();
         return datastore.run(query);
     }

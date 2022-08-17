@@ -16,9 +16,9 @@ public class RestAPIController {
     @Autowired
     private RestAPIInterface restAPIInterface;
 
-    @GetMapping("/showdetails")
-    public QueryResults<Entity> showDetails(){
-        return restAPIInterface.getShowDetails();
+    @GetMapping("/getStudentDetails/{email}")
+    public QueryResults<Entity> showDetails(@PathVariable("email") String email){
+        return restAPIInterface.getShowDetails(email);
     }
 
     @GetMapping("/register/{name}/{email}/{password}")
@@ -37,12 +37,12 @@ public class RestAPIController {
        return restAPIInterface.delete(email, password);
     }
 
-    @RequestMapping(value = "/login/{email}/{password}/updatename/{newname}", method = RequestMethod.POST)
+    @RequestMapping(value = "/login/{email}/{password}/updatename/{newname}", method = RequestMethod.PUT)
     public String updateName(@PathVariable("email") String email, @PathVariable("password") String password, @PathVariable("newname") String newname){
         return restAPIInterface.updateName(email, password, newname);
     }
 
-    @RequestMapping(value = "/login/{email}/{password}/updatepassword/{newpassword}", method = RequestMethod.POST)
+    @RequestMapping(value = "/login/{email}/{password}/updatepassword/{newpassword}", method = RequestMethod.PUT)
     public String updatePassword(@PathVariable("email") String email, @PathVariable("password") String password, @PathVariable("newpassword") String newpassword){
         return restAPIInterface.updatePassword(email, password, newpassword);
     }

@@ -15,7 +15,7 @@ public class RestAPIService implements RestAPIInterface {
 
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
-        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
+        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("isDeleted", false)));
 //        builder.setLimit(3);
 //        builder.setOrderBy(StructuredQuery.OrderBy.desc("name"));
 //        Cursor cursor = Cursor.fromUrlSafe(null);

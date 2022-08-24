@@ -59,27 +59,27 @@ public class RestAPIService implements RestAPIInterface {
     @Override
     public String login(String email, String password) {
 
-//        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-//
-//        EntityQuery.Builder builder = Query.newEntityQueryBuilder();
-//        builder.setKind("StudentDetails");
-//        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("isDeleted", false)));
-//
-//        Query<Entity> query = builder.build();
-//        QueryResults<Entity> results = datastore.run(query);
-//        Entity entity = results.next();
-//
-//        if(entity != null){
-//
-//            String enPassword = entity.getString(password);
-//            Base64.Decoder decoder = Base64.getDecoder();
-//            byte[] bytes = decoder.decode(enPassword);
-//
-//            if(new String(bytes).equals(password))
-//                return entity.getString("name") + " " + "has logged in...";
-//
-//            return "Your password is incorrect...";
-//        }
+        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+
+        EntityQuery.Builder builder = Query.newEntityQueryBuilder();
+        builder.setKind("StudentDetails");
+        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("isDeleted", false)));
+
+        Query<Entity> query = builder.build();
+        QueryResults<Entity> results = datastore.run(query);
+        Entity entity = results.next();
+
+        if(entity != null){
+
+            String enPassword = entity.getString(password);
+            Base64.Decoder decoder = Base64.getDecoder();
+            byte[] bytes = decoder.decode(enPassword);
+
+            if(new String(bytes).equals(password))
+                return entity.getString("name") + " " + "has logged in...";
+
+            return "Your password is incorrect...";
+        }
 
         return "Your entry is not registered or deleted...";
     }

@@ -71,7 +71,7 @@ public class RestAPIService implements RestAPIInterface {
 
 //        if(entity != null){
 //
-//            String enPassword = entity.getString(password);
+            String enPassword = entity.getString(password);
 //            Base64.Decoder decoder = Base64.getDecoder();
 //            byte[] bytes = decoder.decode(enPassword);
 //

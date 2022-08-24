@@ -69,17 +69,17 @@ public class RestAPIService implements RestAPIInterface {
         QueryResults<Entity> results = datastore.run(query);
         Entity entity = results.next();
 
-        if(entity != null){
-
-            String enPassword = entity.getString(password);
+//        if(entity != null){
+//
+//            String enPassword = entity.getString(password);
 //            Base64.Decoder decoder = Base64.getDecoder();
 //            byte[] bytes = decoder.decode(enPassword);
 //
 //            if(new String(bytes).equals(password))
 //                return entity.getString("name") + " " + "has logged in...";
-
-            return "Your password is " + enPassword;
-        }
+//
+//            return "Your password is " + enPassword;
+//        }
 
         return "Your entry is not registered or deleted...";
     }

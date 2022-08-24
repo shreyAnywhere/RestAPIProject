@@ -63,18 +63,25 @@ public class RestAPIService implements RestAPIInterface {
 
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
-        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("password", password)));
+        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("isDeleted", false)));
 
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);
         Entity entity = results.next();
 
-        if(entity != null && !entity.getBoolean("isDeleted")){
+        if(entity != null){
 
-            return entity.getString("name") + " " + "has logged in...";
+            String enPassword = entity.getString(password);
+            Base64.Decoder decoder = Base64.getDecoder();
+            byte[] bytes = decoder.decode(enPassword);
+
+            if(new String(bytes).equals(password))
+                return entity.getString("name") + " " + "has logged in...";
+
+            return "Your password is incorrect...";
         }
 
-        return "Entered email or password is incorrect or the entry has not registered...";
+        return "Your entry is not registered or deleted...";
     }
 
     @Override

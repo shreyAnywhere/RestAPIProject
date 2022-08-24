@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 
 import com.google.cloud.datastore.StructuredQuery;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 @Service
 public class RestAPIService implements RestAPIInterface {
 
@@ -35,6 +38,8 @@ public class RestAPIService implements RestAPIInterface {
         KeyFactory keyFactory = datastore.newKeyFactory().setKind("StudentDetails");
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);
+        Base64.Encoder encoder = Base64.getEncoder();
+        password = encoder.encodeToString(password.getBytes(StandardCharsets.UTF_8));
 
         if(!results.hasNext()) {
             FullEntity<IncompleteKey> entity = Entity.newBuilder(keyFactory.newKey())

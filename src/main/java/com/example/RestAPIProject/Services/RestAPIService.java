@@ -72,13 +72,13 @@ public class RestAPIService implements RestAPIInterface {
         if(entity != null){
 
             String enPassword = entity.getString(password);
-            Base64.Decoder decoder = Base64.getDecoder();
-            byte[] bytes = decoder.decode(enPassword);
+//            Base64.Decoder decoder = Base64.getDecoder();
+//            byte[] bytes = decoder.decode(enPassword);
+//
+//            if(new String(bytes).equals(password))
+//                return entity.getString("name") + " " + "has logged in...";
 
-            if(new String(bytes).equals(password))
-                return entity.getString("name") + " " + "has logged in...";
-
-            return "Your password is incorrect...";
+            return "Your password is " + enPassword;
         }
 
         return "Your entry is not registered or deleted...";

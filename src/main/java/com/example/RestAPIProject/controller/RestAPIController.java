@@ -39,7 +39,7 @@ public class RestAPIController {
         return map;
     }
 
-    @GetMapping("/register/{name}/{email}/{password}")
+    @PostMapping("/register/{name}/{email}/{password}")
     public ResponseEntity<Object> register(@PathVariable("name") String name, @PathVariable("email") String email, @PathVariable("password") String password){
         boolean isRegistered = restAPIInterface.register(name, email, password);
 

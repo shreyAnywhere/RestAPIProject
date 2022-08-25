@@ -108,40 +108,40 @@ public class RestAPIService implements RestAPIInterface {
     }
 
     @Override
-    public String updateName(String email, String password, String newname) {
+    public String updateName(String email, String newname) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
-        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("password", password)));
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
 
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);
+        Entity entity = results.next();
 
-        if(results.hasNext()){
-            Entity entity = results.next();
+        if(entity != null && (!entity.getBoolean("isDeleted"))){
             entity = Entity.newBuilder(entity).set("name", newname).build();
             datastore.update(entity);
 
             return "Name is updated...";
         }
 
-        return "The entry you want to update is not registered...";
+        return "The entry you want to update is not registered or deleted...";
     }
 
     @Override
-    public String updatePassword(String email, String password, String newpassword) {
+    public String updatePassword(String email, String newpassword) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
-        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("password", password)));
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
 
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);
+        Entity entity = results.next();
 
-        if(results.hasNext()){
-            Entity entity = results.next();
+        if(entity != null && (!entity.getBoolean("isDeleted"))){
             entity = Entity.newBuilder(entity).set("password", newpassword).build();
             datastore.update(entity);
 

@@ -38,13 +38,13 @@ public class RestAPIController {
        return restAPIInterface.delete(email);
     }
 
-    @RequestMapping(value = "/login/{email}/{password}/updatename/{newname}", method = RequestMethod.PUT)
-    public String updateName(@PathVariable("email") String email, @PathVariable("password") String password, @PathVariable("newname") String newname){
-        return restAPIInterface.updateName(email, password, newname);
+    @RequestMapping(value = "/updatename/{email}/{newname}", method = RequestMethod.PUT)
+    public String updateName(@PathVariable("email") String email, @PathVariable("newname") String newname){
+        return restAPIInterface.updateName(email, newname);
     }
 
-    @RequestMapping(value = "/login/{email}/{password}/updatepassword/{newpassword}", method = RequestMethod.PUT)
-    public String updatePassword(@PathVariable("email") String email, @PathVariable("password") String password, @PathVariable("newpassword") String newpassword){
-        return restAPIInterface.updatePassword(email, password, newpassword);
+    @RequestMapping(value = "/updatepassword/{email}/{newpassword}", method = RequestMethod.PUT)
+    public String updatePassword(@PathVariable("email") String email, @PathVariable("newpassword") String newpassword){
+        return restAPIInterface.updatePassword(email, newpassword);
     }
 }

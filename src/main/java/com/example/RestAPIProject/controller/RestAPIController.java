@@ -1,6 +1,7 @@
 package com.example.RestAPIProject.controller;
 
 import com.example.RestAPIProject.Services.RestAPIInterface;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.json.Json;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.QueryResults;
@@ -41,19 +42,24 @@ public class RestAPIController {
     }
 
     @PostMapping("/register/{name}/{email}/{password}")
-    public ResponseEntity<Object> register(@PathVariable("name") String name, @PathVariable("email") String email, @PathVariable("password") String password){
+    public Map<String, Object> register(@PathVariable("name") String name, @PathVariable("email") String email, @PathVariable("password") String password){
         boolean isRegistered = restAPIInterface.register(name, email, password);
-        Map<String, String> map = new HashMap<>();
-        map.put("email", "en@gmail.com");
-        map.put("name", "shrey");
-        map.put("surname", "patel");
+        Map<String, Object> map = new HashMap<>();
 
         if(isRegistered){
-            return new ResponseEntity<Object>(HttpStatus.CREATED);
+            map.put("status", 200);
+            Map<String, String> childMap = new HashMap<>();
+            childMap.put("name", name);
+            childMap.put("email", email);
+            map.put("data", childMap);
+
+            return map;
         }
 
+        map.put("status", 400);
+        map.put("data", "No data");
         //return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-        return ResponseEntity.badRequest().body(map);
+        return map;
     }
 
     @GetMapping("/login/{email}/{password}")

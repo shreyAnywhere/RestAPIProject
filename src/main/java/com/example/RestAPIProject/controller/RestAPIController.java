@@ -14,6 +14,7 @@ import javax.mail.Header;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -42,12 +43,17 @@ public class RestAPIController {
     @PostMapping("/register/{name}/{email}/{password}")
     public ResponseEntity<Object> register(@PathVariable("name") String name, @PathVariable("email") String email, @PathVariable("password") String password){
         boolean isRegistered = restAPIInterface.register(name, email, password);
+        Map<String, String> map = new HashMap<>();
+        map.put("email", "en@gmail.com");
+        map.put("name", "shrey");
+        map.put("surname", "patel");
 
-        if(isRegistered)
+        if(isRegistered){
             return new ResponseEntity<Object>(HttpStatus.CREATED);
+        }
 
         //return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
-        return ResponseEntity.badRequest().body("the email you want to register is already used...");
+        return ResponseEntity.badRequest().body(map);
     }
 
     @GetMapping("/login/{email}/{password}")

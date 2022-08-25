@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.Header;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -19,8 +21,20 @@ public class RestAPIController {
     private RestAPIInterface restAPIInterface;
 
     @GetMapping("/getStudentDetails/{email}")
-    public QueryResults<Entity> showDetails(@PathVariable("email") String email){
-        return restAPIInterface.getShowDetails(email);
+    public Map<String, String> showDetails(@PathVariable("email") String email){
+
+        Entity entity = restAPIInterface.getShowDetails(email).next();
+        Map<String, String> map = new HashMap<>();
+
+        if(entity != null){
+            map.put("email", entity.getString("email"));
+            map.put("name", entity.getString("name"));
+
+            return map;
+        }
+        map.put("entity", "not found");
+
+        return map;
     }
 
     @GetMapping("/register/{name}/{email}/{password}")

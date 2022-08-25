@@ -1,12 +1,14 @@
 package com.example.RestAPIProject.controller;
 
 import com.example.RestAPIProject.Services.RestAPIInterface;
+import com.google.api.client.json.Json;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Header;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -23,7 +25,6 @@ public class RestAPIController {
 
     @GetMapping("/register/{name}/{email}/{password}")
     public String register(@PathVariable("name") String name, @PathVariable("email") String email, @PathVariable("password") String password){
-
         return restAPIInterface.register(name, email, password);
     }
 
@@ -32,9 +33,9 @@ public class RestAPIController {
         return restAPIInterface.login(email, password);
     }
 
-    @GetMapping("/login/{email}/{password}/delete")
-    public String delete(@PathVariable("email") String email, @PathVariable("password") String password){
-       return restAPIInterface.delete(email, password);
+    @GetMapping("/delete/{email}")
+    public String delete(@PathVariable("email") String email){
+       return restAPIInterface.delete(email);
     }
 
     @RequestMapping(value = "/login/{email}/{password}/updatename/{newname}", method = RequestMethod.PUT)

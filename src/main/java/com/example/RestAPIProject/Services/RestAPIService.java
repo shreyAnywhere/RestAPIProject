@@ -86,12 +86,12 @@ public class RestAPIService implements RestAPIInterface {
     }
 
     @Override
-    public String delete(String email, String password) {
+    public String delete(String email) {
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
         builder.setKind("StudentDetails");
-        builder.setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("email", email), StructuredQuery.PropertyFilter.eq("password", password)));
+        builder.setFilter(StructuredQuery.PropertyFilter.eq("email", email));
 
         Query<Entity> query = builder.build();
         QueryResults<Entity> results = datastore.run(query);

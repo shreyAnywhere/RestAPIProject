@@ -46,7 +46,8 @@ public class RestAPIController {
         if(isRegistered)
             return new ResponseEntity<Object>(HttpStatus.CREATED);
 
-        return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+        //return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body("the email you want to register is already used...");
     }
 
     @GetMapping("/login/{email}/{password}")

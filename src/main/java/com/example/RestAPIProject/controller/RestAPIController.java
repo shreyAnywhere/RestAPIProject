@@ -6,6 +6,8 @@ import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.Value;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.Header;
@@ -38,8 +40,13 @@ public class RestAPIController {
     }
 
     @GetMapping("/register/{name}/{email}/{password}")
-    public String register(@PathVariable("name") String name, @PathVariable("email") String email, @PathVariable("password") String password){
-        return restAPIInterface.register(name, email, password);
+    public ResponseEntity<Object> register(@PathVariable("name") String name, @PathVariable("email") String email, @PathVariable("password") String password){
+        boolean isRegistered = restAPIInterface.register(name, email, password);
+
+        if(isRegistered)
+            return new ResponseEntity<Object>(HttpStatus.CREATED);
+
+        return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/login/{email}/{password}")

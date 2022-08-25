@@ -28,7 +28,7 @@ public class RestAPIService implements RestAPIInterface {
     }
 
     @Override
-    public String register(String name, String email, String password) {
+    public boolean register(String name, String email, String password) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
@@ -50,10 +50,10 @@ public class RestAPIService implements RestAPIInterface {
                     .build();
             datastore.put(entity);
 
-            return "Your email is registered...";
+            return true;
         }
 
-        return "This email has been already registered...";
+        return false;
     }
 
     @Override

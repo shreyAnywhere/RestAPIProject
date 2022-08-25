@@ -142,6 +142,8 @@ public class RestAPIService implements RestAPIInterface {
         Entity entity = results.next();
 
         if(entity != null && (!entity.getBoolean("isDeleted"))){
+            Base64.Encoder encoder = Base64.getEncoder();
+            newpassword = encoder.encodeToString(newpassword.getBytes(StandardCharsets.UTF_8));
             entity = Entity.newBuilder(entity).set("password", newpassword).build();
             datastore.update(entity);
 

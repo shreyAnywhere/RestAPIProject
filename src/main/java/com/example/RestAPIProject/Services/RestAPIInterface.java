@@ -10,8 +10,8 @@ public interface RestAPIInterface {
 
     public QueryResults<Entity> getShowDetails(String email);
     public boolean register(String name, String email, String password);
-    public String login(String email, String password);
-    public String delete(String email);
-    public String updateName(String email, String newname);
-    public String updatePassword(String email, String newpassword);
+    public boolean login(String email, String password);
+    public boolean delete(String email);
+    public Entity updateName(String email, String newname);
+    public Entity updatePassword(String email, String newpassword);
 }

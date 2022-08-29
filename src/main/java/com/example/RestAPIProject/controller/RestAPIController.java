@@ -52,33 +52,83 @@ public class RestAPIController {
             childMap.put("name", name);
             childMap.put("email", email);
             map.put("data", childMap);
-
-            return map;
+        }else{
+            map.put("status", 400);
+            map.put("data", "No data");
         }
 
-        map.put("status", 400);
-        map.put("data", "No data");
-        //return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
         return map;
     }
 
     @GetMapping("/login/{email}/{password}")
-    public String login(@PathVariable("email") String email, @PathVariable("password") String password){
-        return restAPIInterface.login(email, password);
+    public Map<String, Object> login(@PathVariable("email") String email, @PathVariable("password") String password){
+        boolean isLoggedIn = restAPIInterface.login(email, password);
+        Map<String, Object> map = new HashMap<>();
+
+        if(isLoggedIn){
+            map.put("status", 200);
+            map.put("data", "successfully logged in");
+        }
+        else{
+            map.put("status", 400);
+            map.put("data", "No data");
+        }
+
+        return map;
     }
 
     @GetMapping("/delete/{email}")
-    public String delete(@PathVariable("email") String email){
-       return restAPIInterface.delete(email);
+    public Map<String, Object> delete(@PathVariable("email") String email){
+        boolean isDeleted = restAPIInterface.delete(email);
+        Map<String, Object> map = new HashMap<>();
+
+        if(isDeleted){
+            map.put("status", 200);
+            map.put("data", "successfully deleted the entry");
+        }
+        else{
+            map.put("status", 400);
+            map.put("data", "No data");
+        }
+
+        return map;
     }
 
     @RequestMapping(value = "/updatename/{email}/{newname}", method = RequestMethod.PUT)
-    public String updateName(@PathVariable("email") String email, @PathVariable("newname") String newname){
-        return restAPIInterface.updateName(email, newname);
+    public Map<String, Object> updateName(@PathVariable("email") String email, @PathVariable("newname") String newname){
+        Entity entity = restAPIInterface.updateName(email, newname);
+        Map<String, Object> map = new HashMap<>();
+
+        if(entity != null) {
+            map.put("status", 200);
+            Map<String, String> childMap = new HashMap<>();
+            childMap.put("name", entity.getString("name"));
+            childMap.put("email", entity.getString("email"));
+            map.put("data", childMap);
+        }else{
+            map.put("status", 400);
+            map.put("data", "No data");
+        }
+
+        return map;
     }
 
     @RequestMapping(value = "/updatepassword/{email}/{newpassword}", method = RequestMethod.PUT)
-    public String updatePassword(@PathVariable("email") String email, @PathVariable("newpassword") String newpassword){
-        return restAPIInterface.updatePassword(email, newpassword);
+    public Map<String, Object> updatePassword(@PathVariable("email") String email, @PathVariable("newpassword") String newpassword){
+        Entity entity = restAPIInterface.updatePassword(email, newpassword);
+        Map<String, Object> map = new HashMap<>();
+
+        if(entity != null) {
+            map.put("status", 200);
+            Map<String, String> childMap = new HashMap<>();
+            childMap.put("name", entity.getString("name"));
+            childMap.put("email", entity.getString("email"));
+            map.put("data", childMap);
+        }else{
+            map.put("status", 400);
+            map.put("data", "No data");
+        }
+
+        return map;
     }
 }

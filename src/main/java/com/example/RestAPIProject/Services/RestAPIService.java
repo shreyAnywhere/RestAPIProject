@@ -57,7 +57,7 @@ public class RestAPIService implements RestAPIInterface {
     }
 
     @Override
-    public String login(String email, String password) {
+    public boolean login(String email, String password) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
@@ -76,17 +76,14 @@ public class RestAPIService implements RestAPIInterface {
             byte[] bytes = decoder.decode(enPassword);
             String dePassword = new String(bytes);
 
-            if(dePassword.equals(password))
-                return entity.getString("name") + " " + "has logged in...";
-
-            return "Your password is incorrect...";
+            return dePassword.equals(password);
         }
 
-        return "Your entry is not registered or deleted...";
+        return false;
     }
 
     @Override
-    public String delete(String email) {
+    public boolean delete(String email) {
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
@@ -101,14 +98,14 @@ public class RestAPIService implements RestAPIInterface {
             entity = Entity.newBuilder(entity).set("isDeleted", true).build();
             datastore.update(entity);
 
-            return "Your entry is deleted...";
+            return true;
         }
 
-        return "Your selected entry has already been deleted...";
+        return false;
     }
 
     @Override
-    public String updateName(String email, String newname) {
+    public Entity updateName(String email, String newname) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
@@ -123,14 +120,14 @@ public class RestAPIService implements RestAPIInterface {
             entity = Entity.newBuilder(entity).set("name", newname).build();
             datastore.update(entity);
 
-            return "Name is updated...";
+            return entity;
         }
 
-        return "The entry you want to update is not registered or deleted...";
+        return null;
     }
 
     @Override
-    public String updatePassword(String email, String newpassword) {
+    public Entity updatePassword(String email, String newpassword) {
 
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         EntityQuery.Builder builder = Query.newEntityQueryBuilder();
@@ -147,10 +144,10 @@ public class RestAPIService implements RestAPIInterface {
             entity = Entity.newBuilder(entity).set("password", newpassword).build();
             datastore.update(entity);
 
-            return "Password is updated...";
+            return entity;
         }
 
-        return "The entry you want to update is not registered...";
+        return null;
     }
 
 }

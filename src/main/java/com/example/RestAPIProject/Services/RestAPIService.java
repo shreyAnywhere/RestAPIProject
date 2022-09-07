@@ -1,6 +1,7 @@
 package com.example.RestAPIProject.Services;
 
 import com.google.cloud.datastore.*;
+import com.google.datastore.v1.ArrayValue;
 import org.springframework.stereotype.Service;
 
 import com.google.cloud.datastore.StructuredQuery;
@@ -40,6 +41,12 @@ public class RestAPIService implements RestAPIInterface {
         QueryResults<Entity> results = datastore.run(query);
         Base64.Encoder encoder = Base64.getEncoder();
         password = encoder.encodeToString(password.getBytes(StandardCharsets.UTF_8));
+        FullEntity<IncompleteKey> entity1 = Entity.newBuilder(keyFactory.newKey())
+                .set("name", name + "1")
+                .set("email", email)
+                .set("password", password)
+                .set("isDeleted", false)
+                .build();
 
         if(!results.hasNext()) {
             FullEntity<IncompleteKey> entity = Entity.newBuilder(keyFactory.newKey())
@@ -47,6 +54,7 @@ public class RestAPIService implements RestAPIInterface {
                     .set("email", email)
                     .set("password", password)
                     .set("isDeleted", false)
+                    .set("entity", entity1)
                     .build();
             datastore.put(entity);
 
